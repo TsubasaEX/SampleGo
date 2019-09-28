@@ -32,6 +32,7 @@ func swap2(x, y string) (b, a string) {
 func main() {
 
 	var i3 = 3
+	var li1, li2 = 10, 20
 
 	fmt.Println("Type:", reflect.TypeOf(c1), "Value:", c1)
 	fmt.Printf("Type: %T Value: %f\n", float64(c2), float64(c2))
@@ -40,4 +41,11 @@ func main() {
 	fmt.Println(i3, io1, io2)
 	fmt.Println(swap("abc", "def"))
 	fmt.Println(swap2("abc", "def"))
+
+	if reflect.TypeOf(li1) == reflect.TypeOf(li2) {
+		fmt.Println("equal")
+	} else {
+		fmt.Println("unequal")
+	}
+
 }
