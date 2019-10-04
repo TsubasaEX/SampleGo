@@ -29,7 +29,7 @@ func (p person) updateAttack(a float64) { //Value Receiver can't modify struct v
 	p.power = p.attack * p.defense
 }
 
-func (p *person) updateDefense(d float64) {
+func (p *person) updateDefense(d float64) { //Pointer Receiver to modify struct values
 	p.defense = d
 	p.power = p.attack * p.defense
 }
