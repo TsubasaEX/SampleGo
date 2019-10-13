@@ -20,6 +20,9 @@ type car struct {
 }
 
 func main() {
+	var carAry = []car{{97, 20, -100, 12.256, person{"andy", "1"}}, {97, 20, -100, 12.256, person{"amy", "2"}}}
+	fmt.Println(carAry)
+
 	var a_car = car{97, 20, -100, 12.256, person{"andy", "1"}}
 	b_car := car{gas_petal: 100,
 		brake_petal: 200,
