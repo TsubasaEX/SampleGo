@@ -1,36 +1,28 @@
-// HelloWorld project main.go
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-type myFloatFunc = func(float64, float64) float64
+type Getter = func() int
+type Setter = func(int)
 
-func myCalc(x float64) myFloatFunc {
+func x_getter_setter(x int) (Getter, Setter) {
+	fmt.Printf("the parameter :\tx (%p) = %d\n", &x, x)
 
-	return func(y, z float64) float64 {
-		return x + y + z
+	getter := func() int {
+		fmt.Printf("getter invoked:\tx (%p) = %d\n", &x, x)
+		return x
 	}
+	setter := func(n int) {
+		x = n
+		fmt.Printf("setter invoked:\tx (%p) = %d\n", &x, x)
+	}
+	return getter, setter
 }
 
-func adder() func(int) int {
-	sum := 0
-	fmt.Println("sum:", sum)
-	return func(x int) int {
-		sum += x
-		return sum
-	}
-
-}
 func main() {
-	fmt.Println(myCalc(10)(2, 3))
+	getX, setX := x_getter_setter(10)
 
-	pos := adder() // This is function closure
-	for i := 0; i < 10; i++ {
-		fmt.Println(pos(i))
-	}
-	for i := 0; i < 10; i++ {
-		fmt.Println(adder()(i))
-	}
+	fmt.Println(getX())
+	setX(20)
+	fmt.Println(getX())
 }
