@@ -38,6 +38,7 @@ func (w Worker) getPay(f float64) float64 {
 // }
 
 // Type Assertion
+// empty interface
 func assert(i interface{}) {
 	v, ok := i.(int)
 	fmt.Println(v, ok)
@@ -75,6 +76,7 @@ func main() {
 	// inf = &w
 	// fmt.Println(inf.getPPay())
 
+	//empty interface
 	var s interface{} = 56
 	assert(s)
 	assert2(s)
