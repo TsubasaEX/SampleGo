@@ -7,7 +7,7 @@ import (
 
 type PayInterface interface {
 	getPay(float64) float64
-	// getPPay() float64	//can't use value receiver and pointer receiver at same time
+	// getPPay() float64	//can't use value receiver and pointer receiver at the same time
 }
 
 type Boss struct {
