@@ -1,9 +1,7 @@
 // HelloWorld project main.go
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func say(c chan string, s string) {
 	c <- s
