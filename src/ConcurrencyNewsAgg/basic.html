@@ -1,0 +1,30 @@
+<head>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+</head>
+<h1>{{.Title}}</h1>
+<table id='myTable' class="display">
+    <col width="35%">
+    <col width="65%">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Keyword</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range $key,$value := .Map}}
+        <tr>
+            <td><a href="{{$value.Location}}"  target='_blank'>{{$key}}</td>
+            <td>{{$value.Keyword}}</td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
