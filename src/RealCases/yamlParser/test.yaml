@@ -1,0 +1,5 @@
+apps:
+  portal:
+    times: 10
+  worker:
+    times: 10
