@@ -10,3 +10,7 @@ type Config struct {
 		Report bool   `yaml:"report"`
 	} `yaml:"apps"`
 }
+
+func abc() string {
+	return "123"
+}

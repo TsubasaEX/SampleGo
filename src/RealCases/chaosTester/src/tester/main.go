@@ -3,7 +3,8 @@ package main
 
 import (
 	"configutil"
-	"fmt"
+
+	"testkicker"
 
 	"io/ioutil"
 	"log"
@@ -24,5 +25,6 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(config)
+
+	testkicker.Kick(config)
 }
