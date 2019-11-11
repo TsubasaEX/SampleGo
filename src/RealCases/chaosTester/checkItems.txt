@@ -1,0 +1,103 @@
+Zach,
+
+The only one means to assert OTA worker is alive or not is sending a request message. Here you go
+
+Request
+Topic:
+/wisepaas/DEVICEON/worker/serveractionreq
+Payload:
+{
+  "type": "OPERATION",
+  "subtype": "GET_PACKAGE_INFOMATION",
+  "severity": "VERBOSE",
+  "message": "{\"pkgType\":\"AgentSetup\"}",
+  "deviceName": "none",
+  "accountId": 0,
+  "accountName": "none",
+  "reserved": "none",
+  "currentNanoTime": 0,
+  "ts": "Oct 23, 2019 10:06:44 AM",
+  "unix_ts": 0,
+  "deliveryTag": -1,
+  "category": "NOT_CATEGORY"
+}
+Expected Response
+Topic
+/wisepaas/DEVICEON/worker/serveractionreq
+Payload:
+{
+  "type": "OPERATION",
+  "subtype": "GET_PACKAGE_INFOMATION_SUCCESSFULLY",
+  "severity": "VERBOSE",
+  "message": "...DOESN'T MATTER...",
+  "deviceName": "none",
+  "accountId": 0,
+  "accountName": "none",
+  "reserved": "none",
+  "currentNanoTime": 0,
+  "ts": "Oct 23, 2019 10:22:11 AM",
+  "unix_ts": 0,
+  "deliveryTag": -1,
+  "category": "NOT_CATEGORY"
+}
+
+Regards,
+Alex Shao
+
+
+Hi Zach,
+
+For Portal:
+
+  Try to call restAPI:
+    Path: /rmm/v1/appinfo/getEncryptPwd/<pwd>
+    Method: GET
+  Success: The response code is 200
+  Fail: The response code is others
+
+Thx 
+Tung Yi
+
+
+
+Hi Zach,
+
+For DeviceWorker:
+
+1. Login
+  Send messge to broker:
+    Topic: /wisepaas/device/<agentId>/agentinfoack
+    Msg: {"content":{"parentID":"","hostname":"TY-PC","sn":"000BAB986231","mac":"000BAB986231","version":"1.2.17.0","type":"IPC","product":"WISE-Agent","manufacture":"Advantech","account":"anonymous","passwd":"","status":1,"tag":"RMM"},"commCmd":1,"agentID":"<agentId>","handlerName":"general","sendTS":{"$date":1571726751802}}
+  Success: Query PostgreSQL (select dv.connected from deviceview dv where dv.agentid=<agentId>) and the value of "connected" convers to 'true' from 'false'
+  Fail: Query PostgreSQL (select dv.connected from deviceview dv where dv.agentid=<agentId>) and the value of "connected" is 'false' or null
+
+2. HB
+  Send messge to broker:
+    Topic: /wisepaas/device/<agentId>/notifyack
+    Msg: {"hb":{"devID":"<agentId>"}}
+  Success: Query MongoDB (db.getCollection('common_HeartBeat').find({"agentId" : "<agentId>"})) and the value of "ts" is newer than before
+  Fail: Query MongoDB (db.getCollection('common_HeartBeat').find({"agentId" : "<agentId>"})) and the value of "ts" is unchanged.
+
+3. Capability
+  Send messge to broker:
+    Topic: /wisepaas/RMM/<agentId>/agentactionack
+    Msg: {"content":{"screenshot":{"Information":{"e":[{"n":"functionList","sv":"internal"},{"n":"functionCode","v":1}],"bn":"Information","nonSensorData":true},"opTS":{"$date":1571726751840},"dataFlow":"screenshot/<agentId>","seq":"5_1571726751840","srcTs":1571726751840}},"commCmd":2052,"agentID":"<agentId>","handlerName":"general","sendTS":{"$date":1571726751840}}
+  Success: Query PostgreSQL (SELECT p."new" from plugin p where p.agentid='<agentId>' AND p.name='screenshot') and the value of "new" convers to 'true' from 'false'
+  Fail: Query PostgreSQL (SELECT p."new" from plugin p where p.agentid='<agentId>' AND p.name='screenshot') and the value of "new" is 'false'
+
+4. Logout
+  Send messge to broker:
+    Topic: /wisepaas/device/<agentId>/agentinfoack
+    Msg: {"content":{"parentID":"","hostname":"TY-PC","sn":"000BAB986231","mac":"000BAB986231","version":"1.2.17.0","type":"IPC","product":"WISE-Agent","manufacture":"Advantech","account":"anonymous","passwd":"","status":0,"tag":"RMM"},"commCmd":1,"agentID":"<agentId>","handlerName":"general","sendTS":{"$date":1571726751802}}
+  Success: Query PostgreSQL (select dv.connected from deviceview dv where dv.agentid=<agentId>) and the value of "connected" convers to 'false' from 'true'
+  Fail: Query PostgreSQL (select dv.connected from deviceview dv where dv.agentid=<agentId>) and the value of "connected" is 'true'
+
+5. Report Data
+  Send messge to broker:
+    Topic: /wisepaas/device/<agentId>/devinfoack
+    Msg: {"content":{"SUSIControl":{"Hardware Monitor":{"bn":"Hardware Monitor","id":58,"Voltage":{"bn":"Voltage","id":58,"e":[{"n":"5V Standby","v":36},{"n":"3.3V","v":59},{"n":"12V","v":23},{"n":"CMOS Battery","v":23,"extMsg":{"data":1}},{"n":"5V","v":58}]}}}},"commCmd":2055,"agentID":"<agentId>","handlerName":"general","sendTS":{"$date":1539073137968}}
+  Success: Query MongoDB (db.getCollection('common_SUSIControl').find({"agentId" : "<agentId>"}).size()) and the value is more 5 data than before
+  Fail: Query MongoDB (db.getCollection('common_SUSIControl').find({"agentId" : "<agentId>"}).size()) and the value is equal with before
+
+Thx 
+Tung Yi

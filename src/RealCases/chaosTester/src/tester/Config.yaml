@@ -1,10 +1,11 @@
+ip: 192.168.11.6
 apps:
-  - name: portal
+  - name: es-edgesense-portal
     enable: true
     label: "rmmModule=rmm-portal"
     times: 10
     report: true
-  - name: worker
+  - name: es-edgesense-worker
     enable: true
     label: "rmmModule=rmm-worker"
     times: 10

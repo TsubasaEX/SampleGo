@@ -2,6 +2,7 @@
 package configutil
 
 type Config struct {
+	IP   string `yaml:"ip"`
 	Apps []struct {
 		Name   string `yaml:"name"`
 		Enable bool   `yaml:"enable"`
@@ -9,8 +10,4 @@ type Config struct {
 		Times  int    `yaml:"times"`
 		Report bool   `yaml:"report"`
 	} `yaml:"apps"`
-}
-
-func abc() string {
-	return "123"
 }
