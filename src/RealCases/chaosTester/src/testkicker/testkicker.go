@@ -5,17 +5,22 @@ import (
 	"app/edgesense/portal"
 	"configutil"
 	"fmt"
+	"testutil"
 )
 
 func Kick(config configutil.Config) {
 
+	var testfunc testutil.TestFunc
 	for _, app := range config.Apps {
-		switch app.Name {
-		case "es-edgesense-portal":
-			portal.Test()
-		// case "es-edgesense-worker":
-		default:
-			fmt.Println("default")
+		if app.Enable {
+			switch app.Name {
+			case "es-edgesense-portal":
+				testfunc = &portal.TestEntry{config.IP, app.Label, app.Times, app.Report}
+				testfunc.Test()
+			// case "es-edgesense-worker":
+			default:
+				fmt.Println("default")
+			}
 		}
 	}
 

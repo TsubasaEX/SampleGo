@@ -8,14 +8,17 @@ import (
 	"time"
 )
 
+type TestEntry struct {
+	IP     string
+	Label  string
+	Times  int
+	Report bool
+}
+
 const NO_RESOURCES_FOUND string = "No resources found."
 const PASS string = "[PASS]"
 
-func Pr() string {
-	return "portal"
-}
-
-func status_check() bool {
+func (testentry *TestEntry) status_check() bool {
 	str := "kubectl get pods -l rmmModule=rmm-portal --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
@@ -33,7 +36,7 @@ func status_check() bool {
 	return true
 }
 
-func delete_pod() bool {
+func (testentry *TestEntry) delete_pod() bool {
 	str := "kubectl delete pods -l rmmModule=rmm-portal --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
@@ -51,14 +54,14 @@ func delete_pod() bool {
 	return true
 }
 
-func func_check() bool {
+func (testentry *TestEntry) func_check() bool {
 	return true
 }
 
-func Test() {
+func (testentry *TestEntry) Test() {
 	for {
 		fmt.Println("Stage 1.....")
-		if status_check() {
+		if testentry.status_check() {
 			fmt.Println(PASS, "Stage 1")
 			break
 		}
@@ -67,7 +70,7 @@ func Test() {
 
 	for {
 		fmt.Println("Stage 2......")
-		if delete_pod() {
+		if testentry.delete_pod() {
 			fmt.Println(PASS, "Stage 2")
 			break
 		}
@@ -76,7 +79,7 @@ func Test() {
 
 	for {
 		fmt.Println("Stage 3......")
-		if status_check() {
+		if testentry.status_check() {
 			fmt.Println(PASS, "Stage 3")
 			break
 		}

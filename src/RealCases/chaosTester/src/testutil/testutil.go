@@ -2,6 +2,5 @@
 package testutil
 
 type TestFunc interface {
-	Check()
-	Kill()
+	Test()
 }
