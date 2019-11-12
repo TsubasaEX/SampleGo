@@ -15,7 +15,7 @@ func Kick(config configutil.Config) {
 		if app.Enable {
 			switch app.Name {
 			case "es-edgesense-portal":
-				testfunc = &portal.TestEntry{config.IP, app.Label, app.Times, app.Report}
+				testfunc = &portal.TestEntry{config.IP, app.Name, app.Label, app.Times, app.Report, app.Port}
 				testfunc.Test()
 			// case "es-edgesense-worker":
 			default:

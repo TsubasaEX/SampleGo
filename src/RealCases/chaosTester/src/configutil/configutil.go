@@ -9,5 +9,6 @@ type Config struct {
 		Label  string `yaml:"label"`
 		Times  int    `yaml:"times"`
 		Report bool   `yaml:"report"`
+		Port   string `yaml:"port,omitempty"`
 	} `yaml:"apps"`
 }
