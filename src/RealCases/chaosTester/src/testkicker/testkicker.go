@@ -11,11 +11,12 @@ import (
 func Kick(config configutil.Config) {
 
 	var testfunc testutil.TestFunc
-	for _, app := range config.Apps {
-		if app.Enable {
-			switch app.Name {
+
+	for _, web := range config.Apps.Web {
+		if web.Enable {
+			switch web.Name {
 			case "es-edgesense-portal":
-				testfunc = &portal.TestEntry{config.IP, app.Name, app.Label, app.Times, app.Report, app.Port}
+				testfunc = &portal.TestEntry{config.IP, web.Name, web.Label, web.Times, web.Report, web.Port}
 				testfunc.Test()
 			// case "es-edgesense-worker":
 			default:
@@ -23,5 +24,8 @@ func Kick(config configutil.Config) {
 			}
 		}
 	}
+
+	// for _, app := range config.Apps.App {
+	// }
 
 }

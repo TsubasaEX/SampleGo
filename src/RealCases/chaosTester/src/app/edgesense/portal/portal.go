@@ -93,7 +93,7 @@ func (testentry *TestEntry) Test() {
 	rc.Println(TEST_AGAINST, testentry.Name, DOT_STR)
 	for i := 0; i < testentry.Times; i++ {
 		count := 0
-		rc.Println(ROUND, i)
+		rc.Println(ROUND, i+1)
 		fmt.Println(DASH_STR)
 		for {
 			fmt.Println(STAGE_ONE, DOT_STR)

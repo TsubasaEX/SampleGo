@@ -1,13 +1,15 @@
 ip: 192.168.11.6
 apps:
-  - name: es-edgesense-portal
-    enable: true
-    label: "rmmModule=rmm-portal"
-    times: 3
-    report: true
-    port: 8087
-  - name: es-edgesense-worker
-    enable: true
-    label: "rmmModule=rmm-worker"
-    times: 10
-    report: true
+  web:
+    - name: es-edgesense-portal
+      port: "8087"
+      enable: true
+      label: "rmmModule=rmm-portal"
+      times: 3
+      report: true
+  app:
+    - name: es-edgesense-worker
+      enable: true
+      label: "rmmModule=rmm-worker"
+      times: 10
+      report: true
