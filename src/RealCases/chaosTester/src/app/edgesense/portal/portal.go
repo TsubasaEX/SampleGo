@@ -154,5 +154,5 @@ func (testentry *TestEntry) Test() {
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 	}
-	pc.Println(emoji(ICON_CROSS), DONE, TEST_AGAINST, testentry.Name)
+	pc.Println(emoji(ICON_CHECK), DONE, TEST_AGAINST, testentry.Name)
 }
