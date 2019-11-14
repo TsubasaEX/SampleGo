@@ -1,3 +1,4 @@
+apiVersion: tests/v1
 ip: 192.168.11.6
 apps:
   web:

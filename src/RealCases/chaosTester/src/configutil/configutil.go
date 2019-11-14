@@ -2,8 +2,9 @@
 package configutil
 
 type Config struct {
-	IP   string `yaml:"ip"`
-	Apps struct {
+	APIVersion string `yaml:"apiVersion"`
+	IP         string `yaml:"ip"`
+	Apps       struct {
 		Web []struct {
 			Name   string `yaml:"name"`
 			Port   string `yaml:"port"`
