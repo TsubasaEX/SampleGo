@@ -8,7 +8,7 @@ import (
 	"testutil"
 )
 
-func Kick(config configutil.Config) {
+func Kick(config configutil.Config, args []string) {
 
 	var testfunc testutil.TestFunc
 
@@ -17,7 +17,7 @@ func Kick(config configutil.Config) {
 			switch web.Name {
 			case "es-edgesense-portal":
 				testfunc = &portal.TestEntry{config.IP, web.Name, web.Label, web.Times, web.Report, web.Port}
-				testfunc.Test()
+				testfunc.Test(args)
 			// case "es-edgesense-worker":
 			default:
 				fmt.Println("default")

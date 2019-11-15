@@ -2,5 +2,5 @@
 package testutil
 
 type TestFunc interface {
-	Test()
+	Test([]string)
 }

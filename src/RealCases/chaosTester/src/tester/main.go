@@ -3,6 +3,7 @@ package main
 
 import (
 	"configutil"
+	"os"
 
 	"testkicker"
 
@@ -14,6 +15,7 @@ import (
 
 func main() {
 
+	argsWithoutProg := os.Args[1:]
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	data, err := ioutil.ReadFile("Config.yaml")
@@ -26,5 +28,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	testkicker.Kick(config)
+	testkicker.Kick(config, argsWithoutProg)
 }

@@ -25,19 +25,27 @@ type TestEntry struct {
 const NO_RESOURCES_FOUND = "No resources found."
 const TEST_AGAINST string = "Tests Against"
 const ROUND string = "Round"
-const STAGE_ONE string = "Stage 1"
-const STAGE_TWO string = "Stage 2"
-const STAGE_THREE string = "Stage 3"
-const STAGE_FOUR string = "Stage 4"
+const STAGE_ONE string = "Stage 1: Checking Running Status"
+const STAGE_TWO string = "Stage 2: Deleting Pod"
+const STAGE_THREE string = "Stage 3: Checking Running Status"
+const STAGE_FOUR string = "Stage 4: Checking Functions"
 const PASS string = "[PASS]"
 const FAIL string = "[FAIL]"
-const DONE string = "[DONE]"
+const COMPLETE string = "[COMPLETE]"
 const DOT_STR = "............"
 const DASH_STR = "----------------------------------------"
 const RETRY_TIMES = 3
 
 const ICON_CHECK = "\\U00002705"
 const ICON_CROSS = "\\U0000274E"
+const ICON_AIRPLANE = "\\U00002708"
+const ICON_SPARKLE = "\\U00002728"
+const ICON_HEART = "\\U00002764"
+const ICON_PENCIL = "\\U0000270F"
+const ICON_SCISSOR = "\\U00002702"
+const ICON_ARROW = "\\U000027A1"
+
+var simple = false
 
 func emoji(s string) string {
 	// Hex String
@@ -51,12 +59,45 @@ func emoji(s string) string {
 	return str
 }
 
+func getTestString(s string) string {
+	return fmt.Sprintln(emoji(ICON_SCISSOR), TEST_AGAINST, s, DOT_STR, emoji(ICON_HEART))
+}
+
+func getSplitLine() string {
+	str := ""
+	for i := 0; i < 20; i++ {
+		str += emoji(ICON_ARROW)
+	}
+	return fmt.Sprintln(str)
+}
+func getRoundString(n int) string {
+	return fmt.Sprintln(emoji(ICON_AIRPLANE), ROUND, n)
+}
+
+func getStageString(s string) string {
+	return fmt.Sprintln(emoji(ICON_SPARKLE), s, DOT_STR, emoji(ICON_HEART))
+}
+
+func getStagePassString(s string) string {
+	return fmt.Sprintln(emoji(ICON_CHECK), PASS, s)
+}
+
+func getStageFailString(s string) string {
+	return fmt.Sprintln(emoji(ICON_CROSS), FAIL, s)
+}
+
+func getCompleteString(s string) string {
+	return fmt.Sprintln(emoji(ICON_CHECK), COMPLETE, TEST_AGAINST, s)
+}
+
 func (testentry *TestEntry) status_check() bool {
 
 	str := "kubectl get pods -l " + testentry.Label + " --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
-	fmt.Println(str)
+	if !simple {
+		fmt.Println(emoji(ICON_PENCIL), str)
+	}
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(err)
@@ -74,7 +115,9 @@ func (testentry *TestEntry) delete_pod() bool {
 	str := "kubectl delete pods -l " + testentry.Label + " --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
-	fmt.Println(str)
+	if !simple {
+		fmt.Println(emoji(ICON_PENCIL), str)
+	}
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(err)
@@ -90,8 +133,10 @@ func (testentry *TestEntry) delete_pod() bool {
 
 func (testentry *TestEntry) func_check() bool {
 	str := "http://" + testentry.IP + ":" + testentry.Port
-	fmt.Println(str)
 
+	if !simple {
+		fmt.Println(emoji(ICON_PENCIL), str)
+	}
 	_, err := http.Get(str)
 
 	if err != nil {
@@ -102,57 +147,63 @@ func (testentry *TestEntry) func_check() bool {
 	return true
 }
 
-func (testentry *TestEntry) Test() {
+func (testentry *TestEntry) Test(args []string) {
 	rc := color.New(color.FgCyan, color.Bold)
 	pc := color.New(color.FgGreen, color.Bold)
 	fc := color.New(color.FgRed, color.Bold)
-	fmt.Println(emoji(ICON_CHECK))
-	fmt.Println(emoji(ICON_CROSS))
-	rc.Println(TEST_AGAINST, testentry.Name, DOT_STR)
+	cc := color.New(color.FgYellow, color.Bold)
+
+	if len(args) != 0 {
+		if strings.Compare(args[0], "-s") == 0 {
+			simple = true
+		}
+	}
+
+	rc.Print(getTestString(testentry.Name))
 	for i := 0; i < testentry.Times; i++ {
 		count := 0
-		rc.Println(ROUND, i+1)
-		fmt.Println(DASH_STR)
+		fmt.Print(getSplitLine())
+		rc.Print(getRoundString(i + 1))
 		for {
-			fmt.Println(STAGE_ONE, DOT_STR)
+			fmt.Print(getStageString(STAGE_ONE))
 			if testentry.status_check() {
-				pc.Println(emoji(ICON_CHECK), PASS, STAGE_ONE)
+				pc.Print(getStagePassString(STAGE_ONE))
 				break
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 
 		for {
-			fmt.Println(STAGE_TWO, DOT_STR)
+			fmt.Print(getStageString(STAGE_TWO))
 			if testentry.delete_pod() {
-				pc.Println(emoji(ICON_CHECK), PASS, STAGE_TWO)
+				pc.Print(getStagePassString(STAGE_TWO))
 				break
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 
 		for {
-			fmt.Println(STAGE_THREE, DOT_STR)
+			fmt.Print(getStageString(STAGE_THREE))
 			if testentry.status_check() {
-				pc.Println(emoji(ICON_CHECK), PASS, STAGE_THREE)
+				pc.Print(getStagePassString(STAGE_THREE))
 				break
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 
 		for {
-			fmt.Println(STAGE_FOUR, DOT_STR)
+			fmt.Print(getStageString(STAGE_FOUR))
 			if testentry.func_check() {
-				pc.Println(emoji(ICON_CHECK), PASS, STAGE_FOUR, "\n")
+				pc.Print(getStagePassString(STAGE_FOUR))
 				break
 			}
 			count++
 			if count >= RETRY_TIMES {
-				fc.Println(emoji(ICON_CROSS), FAIL, STAGE_FOUR)
+				fc.Print(getStageFailString(STAGE_FOUR))
 				break
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 	}
-	pc.Println(emoji(ICON_CHECK), DONE, TEST_AGAINST, testentry.Name)
+	cc.Print(getCompleteString(testentry.Name))
 }

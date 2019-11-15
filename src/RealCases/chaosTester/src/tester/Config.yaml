@@ -6,7 +6,7 @@ apps:
       port: "8087"
       enable: true
       label: "rmmModule=rmm-portal"
-      times: 3
+      times: 1
       report: true
   app:
     - name: es-edgesense-worker
