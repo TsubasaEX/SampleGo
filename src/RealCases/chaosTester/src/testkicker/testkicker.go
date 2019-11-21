@@ -4,6 +4,7 @@ package testkicker
 import (
 	"app/edgesense/portal"
 	"configutil"
+	"encoding/csv"
 	"fmt"
 	"log"
 	"strings"
@@ -14,6 +15,7 @@ func Kick(config configutil.Config, args []string) {
 
 	var testfunc testutil.TestFunc
 	var testLogger *log.Logger
+	var testReporter *csv.Writer
 	var b_Simple bool = false
 	var b_Log bool = false
 	if len(args) != 0 {
@@ -28,13 +30,14 @@ func Kick(config configutil.Config, args []string) {
 	if b_Log {
 		testLogger = testutil.GetLogger()
 	}
+	testReporter = testutil.GetReporter()
 
 	for _, web := range config.Apps.Web {
 		if web.Enable {
 			switch web.Name {
 			case "es-edgesense-portal":
-				testfunc = &portal.TestEntry{config.IP, web.Name, web.Label, web.Times, web.Report, web.Port}
-				testfunc.Test(args, b_Simple, testLogger)
+				testfunc = &portal.TestEntity{config.IP, web.Name, web.Label, web.Times, web.Port}
+				testfunc.Test(args, b_Simple, testLogger, testReporter)
 			// case "es-edgesense-worker":
 			default:
 				fmt.Println("default")
@@ -45,6 +48,7 @@ func Kick(config configutil.Config, args []string) {
 	if b_Log {
 		testutil.CloseLogger()
 	}
+	testutil.CloseReporter()
 
 	// for _, app := range config.Apps.App {
 	// }

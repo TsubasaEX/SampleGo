@@ -2,6 +2,7 @@
 package portal
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,22 +10,26 @@ import (
 	"strings"
 	"testutil"
 	"time"
+
+	"github.com/briandowns/spinner"
 )
 
-type TestEntry struct {
-	IP     string
-	Name   string
-	Label  string
-	Times  int
-	Report bool
-	Port   string
+type TestEntity struct {
+	IP    string
+	Name  string
+	Label string
+	Times int
+	Port  string
 }
 
 var b_Simple = false
 var testLogger *log.Logger
 
-func (testentry *TestEntry) status_check() bool {
-	str := "kubectl get pods -l " + testentry.Label + " --field-selector=status.phase=Running"
+const PASS = "PASS"
+const FAIL = "FAIL"
+
+func (testentity *TestEntity) status_check() bool {
+	str := "kubectl get pods -l " + testentity.Label + " --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
 	if !b_Simple {
@@ -50,8 +55,8 @@ func (testentry *TestEntry) status_check() bool {
 	return true
 }
 
-func (testentry *TestEntry) delete_pod() bool {
-	str := "kubectl delete pods -l " + testentry.Label + " --field-selector=status.phase=Running"
+func (testentity *TestEntity) delete_pod() bool {
+	str := "kubectl delete pods -l " + testentity.Label + " --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
 
 	if !b_Simple {
@@ -64,6 +69,10 @@ func (testentry *TestEntry) delete_pod() bool {
 	if err != nil {
 		fmt.Println(err.Error())
 		fmt.Println("Failed to exec command:", cmd)
+		if testLogger != nil {
+			testLogger.Println(err.Error())
+			testLogger.Println("Failed to exec command:", cmd)
+		}
 	}
 
 	str_out := string(out)
@@ -73,8 +82,8 @@ func (testentry *TestEntry) delete_pod() bool {
 	return true
 }
 
-func (testentry *TestEntry) func_check() bool {
-	str := "http://" + testentry.IP + ":" + testentry.Port
+func (testentity *TestEntity) func_check() bool {
+	str := "http://" + testentity.IP + ":" + testentity.Port
 
 	if !b_Simple {
 		fmt.Println(testutil.Emoji(testutil.ICON_PENCIL), str)
@@ -85,20 +94,34 @@ func (testentry *TestEntry) func_check() bool {
 	_, err := http.Get(str)
 
 	if err != nil {
+		fmt.Println(err.Error())
+		if testLogger != nil {
+			testLogger.Println(err.Error())
+		}
 		return false
 	}
 	return true
 }
 
-func (testentry *TestEntry) Test(args []string, simple bool, testlogger *log.Logger) {
+func (testentity *TestEntity) gen_report(pass bool) {
+
+}
+
+func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.Logger, testreporter *csv.Writer) {
 	b_Simple = simple
 	testLogger = testlogger
-
-	testutil.Rc.Print(testutil.GetTestString(testentry.Name))
+	var sp *spinner.Spinner
+	testutil.Rc.Print(testutil.GetTestString(testentity.Name))
 	if testLogger != nil {
-		testLogger.Print(testutil.GetTestString(testentry.Name))
+		testLogger.Print(testutil.GetTestString(testentity.Name))
 	}
-	for i := 0; i < testentry.Times; i++ {
+	if b_Simple {
+		sp = spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+	}
+	testReporter := testreporter
+	var records [][]string
+
+	for i := 0; i < testentity.Times; i++ {
 		count := 0
 		fmt.Print(testutil.GetSplitLine())
 		if testLogger != nil {
@@ -108,12 +131,21 @@ func (testentry *TestEntry) Test(args []string, simple bool, testlogger *log.Log
 		if testLogger != nil {
 			testLogger.Print(testutil.GetRoundString(i + 1))
 		}
+		if sp != nil {
+			sp.Suffix = testutil.GetStageString(testutil.STAGE_ONE)
+			sp.Start()
+		}
 		for {
-			fmt.Print(testutil.GetStageString(testutil.STAGE_ONE))
+			if sp == nil {
+				fmt.Println(testutil.GetStageString(testutil.STAGE_ONE))
+			}
 			if testLogger != nil {
 				testLogger.Print(testutil.GetStageString(testutil.STAGE_ONE))
 			}
-			if testentry.status_check() {
+			if testentity.status_check() {
+				if sp != nil {
+					sp.Stop()
+				}
 				testutil.Pc.Print(testutil.GetStagePassString(testutil.STAGE_ONE))
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_ONE))
@@ -123,12 +155,21 @@ func (testentry *TestEntry) Test(args []string, simple bool, testlogger *log.Log
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 
+		if sp != nil {
+			sp.Suffix = testutil.GetStageString(testutil.STAGE_TWO)
+			sp.Start()
+		}
 		for {
-			fmt.Print(testutil.GetStageString(testutil.STAGE_TWO))
+			if sp == nil {
+				fmt.Println(testutil.GetStageString(testutil.STAGE_TWO))
+			}
 			if testLogger != nil {
 				testLogger.Print(testutil.GetStageString(testutil.STAGE_TWO))
 			}
-			if testentry.delete_pod() {
+			if testentity.delete_pod() {
+				if sp != nil {
+					sp.Stop()
+				}
 				testutil.Pc.Print(testutil.GetStagePassString(testutil.STAGE_TWO))
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_TWO))
@@ -138,12 +179,21 @@ func (testentry *TestEntry) Test(args []string, simple bool, testlogger *log.Log
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 
+		if sp != nil {
+			sp.Suffix = testutil.GetStageString(testutil.STAGE_THREE)
+			sp.Start()
+		}
 		for {
-			fmt.Print(testutil.GetStageString(testutil.STAGE_THREE))
+			if sp == nil {
+				fmt.Println(testutil.GetStageString(testutil.STAGE_THREE))
+			}
 			if testLogger != nil {
 				testLogger.Print(testutil.GetStageString(testutil.STAGE_THREE))
 			}
-			if testentry.status_check() {
+			if testentity.status_check() {
+				if sp != nil {
+					sp.Stop()
+				}
 				testutil.Pc.Print(testutil.GetStagePassString(testutil.STAGE_THREE))
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_THREE))
@@ -152,32 +202,56 @@ func (testentry *TestEntry) Test(args []string, simple bool, testlogger *log.Log
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
-
+		if sp != nil {
+			sp.Suffix = testutil.GetStageString(testutil.STAGE_FOUR)
+			sp.Start()
+		}
 		for {
-			fmt.Print(testutil.GetStageString(testutil.STAGE_FOUR))
+			if sp == nil {
+				fmt.Println(testutil.GetStageString(testutil.STAGE_FOUR))
+			}
 			if testLogger != nil {
 				testLogger.Print(testutil.GetStageString(testutil.STAGE_FOUR))
 			}
-			if testentry.func_check() {
+			if testentity.func_check() {
+				if sp != nil {
+					sp.Stop()
+				}
 				testutil.Pc.Print(testutil.GetStagePassString(testutil.STAGE_FOUR))
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_FOUR))
 				}
+				t := time.Now()
+				record := testutil.GetRecord(i+1, testentity.Name, PASS, t.Format("01-02-2006 15:04:05.00 MST"))
+				records = append(records, record)
 				break
 			}
 			count++
 			if count >= testutil.RETRY_TIMES {
+				if sp != nil {
+					sp.Stop()
+				}
 				testutil.Fc.Print(testutil.GetStageFailString(testutil.STAGE_FOUR))
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStageFailString(testutil.STAGE_FOUR))
 				}
+				t := time.Now()
+				record := testutil.GetRecord(i+1, testentity.Name, FAIL, t.Format("01-02-2006 15:04:05.00 MST"))
+				records = append(records, record)
 				break
 			}
 			time.Sleep(10000 * time.Millisecond) //10 sec per status check
 		}
 	}
-	testutil.Cc.Print(testutil.GetCompleteString(testentry.Name))
+
+	testReporter.WriteAll(records) // calls Flush internally
+
+	if err := testReporter.Error(); err != nil {
+		log.Fatalln("error writing csv:", err)
+	}
+
+	testutil.Cc.Print(testutil.GetCompleteString(testentity.Name))
 	if testLogger != nil {
-		testLogger.Print(testutil.GetCompleteString(testentry.Name))
+		testLogger.Print(testutil.GetCompleteString(testentity.Name))
 	}
 }

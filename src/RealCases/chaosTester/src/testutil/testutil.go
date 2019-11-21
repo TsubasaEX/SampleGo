@@ -2,6 +2,7 @@
 package testutil
 
 import (
+	"encoding/csv"
 	"fmt"
 	"html"
 	"log"
@@ -16,7 +17,8 @@ import (
 type TestFunc interface {
 	Test([]string,
 		bool,
-		*log.Logger)
+		*log.Logger,
+		*csv.Writer)
 }
 
 var Rc = color.New(color.FgCyan, color.Bold)
@@ -25,6 +27,8 @@ var Fc = color.New(color.FgRed, color.Bold)
 var Cc = color.New(color.FgYellow, color.Bold)
 
 var logFile *os.File
+var reportFile *os.File
+var t = time.Now()
 
 const NO_RESOURCES_FOUND = "No resources found."
 const TEST_AGAINST string = "Tests Against"
@@ -78,7 +82,7 @@ func GetRoundString(n int) string {
 }
 
 func GetStageString(s string) string {
-	return fmt.Sprintln(Emoji(ICON_SPARKLE), s, DOT_STR, Emoji(ICON_HEART))
+	return fmt.Sprint(Emoji(ICON_SPARKLE), s, DOT_STR, Emoji(ICON_HEART))
 }
 
 func GetStagePassString(s string) string {
@@ -94,16 +98,33 @@ func GetCompleteString(s string) string {
 }
 
 func GetLogger() *log.Logger {
-	t := time.Now()
-	logFile, err := os.OpenFile(t.Format("20060102150405")+"_"+"logfile.log", os.O_WRONLY|os.O_CREATE, 0666)
+	logFile, err := os.OpenFile(t.Format("20060102150405")+".log", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
-
 	logger := log.New(logFile, "[LOG]", log.Ldate|log.Lmicroseconds)
 	return logger
 }
 
 func CloseLogger() {
 	logFile.Close()
+}
+
+func GetReporter() *csv.Writer {
+	reportFile, err := os.OpenFile(t.Format("20060102150405")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalf("file open error : %v", err)
+	}
+	reporter := csv.NewWriter(reportFile)
+	record := []string{"NO.", "Name", "Result", "Ts"}
+	reporter.Write(record)
+	return reporter
+}
+
+func GetRecord(n int, name string, result string, tformat string) []string {
+	return []string{strconv.Itoa(n), name, result, PASS, tformat}
+}
+
+func CloseReporter() {
+	reportFile.Close()
 }

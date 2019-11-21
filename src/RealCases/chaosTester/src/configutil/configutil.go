@@ -11,14 +11,12 @@ type Config struct {
 			Enable bool   `yaml:"enable"`
 			Label  string `yaml:"label"`
 			Times  int    `yaml:"times"`
-			Report bool   `yaml:"report"`
 		} `yaml:"web"`
 		App []struct {
 			Name   string `yaml:"name"`
 			Enable bool   `yaml:"enable"`
 			Label  string `yaml:"label"`
 			Times  int    `yaml:"times"`
-			Report bool   `yaml:"report"`
 		} `yaml:"app"`
 	} `yaml:"apps"`
 }

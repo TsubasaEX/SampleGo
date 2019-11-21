@@ -7,10 +7,8 @@ apps:
       enable: true
       label: "rmmModule=rmm-portal"
       times: 1
-      report: true
   app:
     - name: es-edgesense-worker
       enable: true
       label: "rmmModule=rmm-worker"
       times: 10
-      report: true
