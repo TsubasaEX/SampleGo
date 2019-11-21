@@ -30,6 +30,7 @@ var logFile *os.File
 var reportFile *os.File
 var t = time.Now()
 
+const NO_TESTCASES_FOUND = "No corresponding TestCase against"
 const NO_RESOURCES_FOUND = "No resources found."
 const TEST_AGAINST string = "Tests Against"
 const ROUND string = "Round"
@@ -53,6 +54,7 @@ const ICON_PENCIL = "\\U0000270F"
 const ICON_SCISSOR = "\\U00002702"
 const ICON_ARROW = "\\U000027A1"
 const ICON_SNOWMAN = "\\U000026C4"
+const ICON_EXCLAMATION = "\\U00002757"
 
 func Emoji(s string) string {
 	// Hex String
@@ -64,6 +66,10 @@ func Emoji(s string) string {
 	// Unescape the string (HTML Entity -> String).
 	str := html.UnescapeString(string(i))
 	return str
+}
+
+func GetNoTestCaseString(s string) string {
+	return fmt.Sprintln(Emoji(ICON_EXCLAMATION), NO_TESTCASES_FOUND, s)
 }
 
 func GetTestString(s string) string {

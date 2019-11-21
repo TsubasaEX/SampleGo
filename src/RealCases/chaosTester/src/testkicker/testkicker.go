@@ -40,7 +40,10 @@ func Kick(config configutil.Config, args []string) {
 				testfunc.Test(args, b_Simple, testLogger, testReporter)
 			// case "es-edgesense-worker":
 			default:
-				fmt.Println("default")
+				fmt.Println(testutil.GetNoTestCaseString(web.Name))
+				if testLogger != nil {
+					testLogger.Println(testutil.GetNoTestCaseString(web.Name))
+				}
 			}
 		}
 	}
