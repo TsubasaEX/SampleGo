@@ -3,7 +3,6 @@ package main
 
 import (
 	"configutil"
-	"fmt"
 	"os"
 
 	"testkicker"
@@ -11,11 +10,12 @@ import (
 	"io/ioutil"
 	"log"
 
+	"webservices"
+
 	"gopkg.in/yaml.v3"
 )
 
-func main() {
-	fmt.Println(float32(1) / 3)
+func startTest() {
 	argsWithoutProg := os.Args[1:]
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
@@ -28,6 +28,10 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 	testkicker.Kick(config, argsWithoutProg)
+}
+
+func main() {
+	go startTest()
+	webservices.Start()
 }

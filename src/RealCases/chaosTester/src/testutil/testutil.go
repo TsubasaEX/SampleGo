@@ -155,7 +155,7 @@ func GetStatisticsRecord(n int, name string, passNum int, total int) []string {
 		strconv.Itoa(passNum),
 		strconv.Itoa(total - passNum),
 		strconv.Itoa(total),
-		fmt.Sprintf("%f", float32(passNum)/float32(3)*100),
+		fmt.Sprintf("%f", float32(passNum)/float32(total)*100),
 		now.Format("01-02-2006 15:04:05.00 MST")}
 }
 
