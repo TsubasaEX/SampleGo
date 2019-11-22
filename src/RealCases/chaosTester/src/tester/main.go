@@ -3,6 +3,7 @@ package main
 
 import (
 	"configutil"
+	"fmt"
 	"os"
 
 	"testkicker"
@@ -14,7 +15,7 @@ import (
 )
 
 func main() {
-
+	fmt.Println(float32(1) / 3)
 	argsWithoutProg := os.Args[1:]
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 

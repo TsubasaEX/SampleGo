@@ -18,7 +18,7 @@ type TestFunc interface {
 	Test([]string,
 		bool,
 		*log.Logger,
-		*csv.Writer)
+		*csv.Writer) int
 }
 
 var Rc = color.New(color.FgCyan, color.Bold)
@@ -28,6 +28,7 @@ var Cc = color.New(color.FgYellow, color.Bold)
 
 var logFile *os.File
 var reportFile *os.File
+var streportFile *os.File
 var t = time.Now()
 
 const NO_TESTCASES_FOUND = "No corresponding TestCase against"
@@ -117,7 +118,7 @@ func CloseLogger() {
 }
 
 func GetReporter() *csv.Writer {
-	reportFile, err := os.OpenFile(t.Format("20060102150405")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+	reportFile, err := os.OpenFile(t.Format("20060102150405_rpt")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
@@ -127,10 +128,37 @@ func GetReporter() *csv.Writer {
 	return reporter
 }
 
-func GetRecord(n int, name string, result string, tformat string) []string {
-	return []string{strconv.Itoa(n), name, result, PASS, tformat}
+func GetRecord(n int, name string, result string) []string {
+	now := time.Now()
+	return []string{strconv.Itoa(n), name, result, now.Format("01-02-2006 15:04:05.00 MST")}
 }
 
 func CloseReporter() {
 	reportFile.Close()
+}
+
+func GetStatisticsReporter() *csv.Writer {
+	streportFile, err := os.OpenFile(t.Format("20060102150405_stats")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalf("file open error : %v", err)
+	}
+	streporter := csv.NewWriter(streportFile)
+	record := []string{"NO.", "Name", "Pass", "Fail", "Total", "Pass Rate(%)", "Ts"}
+	streporter.Write(record)
+	return streporter
+}
+
+func GetStatisticsRecord(n int, name string, passNum int, total int) []string {
+	now := time.Now()
+	return []string{string(n),
+		name,
+		strconv.Itoa(passNum),
+		strconv.Itoa(total - passNum),
+		strconv.Itoa(total),
+		fmt.Sprintf("%f", float32(passNum)/float32(3)*100),
+		now.Format("01-02-2006 15:04:05.00 MST")}
+}
+
+func CloseStatisticsReporter() {
+	streportFile.Close()
 }

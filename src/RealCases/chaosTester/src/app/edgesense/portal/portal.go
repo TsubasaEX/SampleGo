@@ -103,11 +103,7 @@ func (testentity *TestEntity) func_check() bool {
 	return true
 }
 
-func (testentity *TestEntity) gen_report(pass bool) {
-
-}
-
-func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.Logger, testreporter *csv.Writer) {
+func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.Logger, testreporter *csv.Writer) int {
 	b_Simple = simple
 	testLogger = testlogger
 	var sp *spinner.Spinner
@@ -121,6 +117,7 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 	testReporter := testreporter
 	var records [][]string
 
+	passNum := 0
 	for i := 0; i < testentity.Times; i++ {
 		count := 0
 		fmt.Print(testutil.GetSplitLine())
@@ -221,9 +218,10 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_FOUR))
 				}
-				t := time.Now()
-				record := testutil.GetRecord(i+1, testentity.Name, PASS, t.Format("01-02-2006 15:04:05.00 MST"))
+
+				record := testutil.GetRecord(i+1, testentity.Name, PASS)
 				records = append(records, record)
+				passNum++
 				break
 			}
 			count++
@@ -235,8 +233,7 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStageFailString(testutil.STAGE_FOUR))
 				}
-				t := time.Now()
-				record := testutil.GetRecord(i+1, testentity.Name, FAIL, t.Format("01-02-2006 15:04:05.00 MST"))
+				record := testutil.GetRecord(i+1, testentity.Name, FAIL)
 				records = append(records, record)
 				break
 			}
@@ -254,4 +251,5 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 	if testLogger != nil {
 		testLogger.Print(testutil.GetCompleteString(testentity.Name))
 	}
+	return passNum
 }

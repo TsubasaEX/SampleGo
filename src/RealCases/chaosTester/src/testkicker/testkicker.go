@@ -16,8 +16,11 @@ func Kick(config configutil.Config, args []string) {
 	var testfunc testutil.TestFunc
 	var testLogger *log.Logger
 	var testReporter *csv.Writer
+	var teststReporter *csv.Writer
 	var b_Simple bool = false
 	var b_Log bool = false
+	var records [][]string
+	var n = 1
 	if len(args) != 0 {
 		split := strings.Split(args[0], "-")
 		if strings.Contains(split[1], "s") {
@@ -31,13 +34,15 @@ func Kick(config configutil.Config, args []string) {
 		testLogger = testutil.GetLogger()
 	}
 	testReporter = testutil.GetReporter()
-
+	teststReporter = testutil.GetStatisticsReporter()
 	for _, web := range config.Apps.Web {
 		if web.Enable {
 			switch web.Name {
 			case "es-edgesense-portal":
 				testfunc = &portal.TestEntity{config.IP, web.Name, web.Label, web.Times, web.Port}
-				testfunc.Test(args, b_Simple, testLogger, testReporter)
+				passNum := testfunc.Test(args, b_Simple, testLogger, testReporter)
+				record := testutil.GetStatisticsRecord(n, web.Name, passNum, web.Times)
+				records = append(records, record)
 			// case "es-edgesense-worker":
 			default:
 				fmt.Println(testutil.GetNoTestCaseString(web.Name))
@@ -47,11 +52,15 @@ func Kick(config configutil.Config, args []string) {
 			}
 		}
 	}
-
+	teststReporter.WriteAll(records)
+	if err := teststReporter.Error(); err != nil {
+		log.Fatalln("error writing csv:", err)
+	}
 	if b_Log {
 		testutil.CloseLogger()
 	}
 	testutil.CloseReporter()
+	testutil.CloseStatisticsReporter()
 
 	// for _, app := range config.Apps.App {
 	// }
