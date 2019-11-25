@@ -11,12 +11,12 @@ import (
 	"testutil"
 )
 
-func Kick(config configutil.Config, args []string) {
+func Kick(config configutil.Config, args []string) string {
 
 	var testfunc testutil.TestFunc
 	var testLogger *log.Logger
 	var testReporter *csv.Writer
-	var teststReporter *csv.Writer
+	var teststReporter_W *csv.Writer
 	var b_Simple bool = false
 	var b_Log bool = false
 	var records [][]string
@@ -34,7 +34,7 @@ func Kick(config configutil.Config, args []string) {
 		testLogger = testutil.GetLogger()
 	}
 	testReporter = testutil.GetReporter()
-	teststReporter = testutil.GetStatisticsReporter()
+	teststReporter_W = testutil.GetStatisticsReporter_W()
 	for _, web := range config.Apps.Web {
 		if web.Enable {
 			switch web.Name {
@@ -52,16 +52,17 @@ func Kick(config configutil.Config, args []string) {
 			}
 		}
 	}
-	teststReporter.WriteAll(records)
-	if err := teststReporter.Error(); err != nil {
+	teststReporter_W.WriteAll(records)
+	if err := teststReporter_W.Error(); err != nil {
 		log.Fatalln("error writing csv:", err)
 	}
 	if b_Log {
 		testutil.CloseLogger()
 	}
 	testutil.CloseReporter()
-	testutil.CloseStatisticsReporter()
+	testutil.CloseStatisticsReporter_W()
 
+	return testutil.GetStatisticsFileName()
 	// for _, app := range config.Apps.App {
 	// }
 

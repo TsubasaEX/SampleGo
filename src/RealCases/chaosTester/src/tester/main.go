@@ -4,6 +4,7 @@ package main
 import (
 	"configutil"
 	"os"
+	"sync"
 
 	"testkicker"
 
@@ -15,7 +16,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func startTest() {
+var wg sync.WaitGroup
+
+func startTest(ch chan string) {
+	defer wg.Done()
 	argsWithoutProg := os.Args[1:]
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
@@ -28,10 +32,21 @@ func startTest() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	testkicker.Kick(config, argsWithoutProg)
+	ch <- testkicker.Kick(config, argsWithoutProg)
 }
 
 func main() {
-	go startTest()
-	webservices.Start()
+	// ch := make(chan string, 1)
+	// go startTest(ch)
+	// wg.Add(1)
+	// wg.Wait()
+	// close(ch)
+	// _, ok := <-ch
+	// if ok {
+	// 	webservices.Start("123")
+	// } else {
+	// 	// fmt.Println("Starting webservices failed!!")
+	// }
+
+	webservices.Start("20191125154904_stats.csv")
 }
