@@ -28,13 +28,17 @@ var Cc = color.New(color.FgYellow, color.Bold)
 
 var logFile *os.File
 var reportFile *os.File
-var streportFile_W *os.File
-var streportFile_R *os.File
+var streportFile *os.File
+
+var logger *log.Logger
+var reporter *csv.Writer
+var streporter *csv.Writer
 var t = time.Now()
 
 const NO_TESTCASES_FOUND = "No corresponding TestCase against"
 const NO_RESOURCES_FOUND = "No resources found."
 const TEST_AGAINST string = "Tests Against"
+const GENERATED string = "Generated"
 const ROUND string = "Round"
 const STAGE_ONE string = "Stage 1: Checking Running Status"
 const STAGE_TWO string = "Stage 2: Deleting Pod"
@@ -101,11 +105,18 @@ func GetStageFailString(s string) string {
 	return fmt.Sprintln(Emoji(ICON_CROSS), FAIL, s)
 }
 
-func GetCompleteString(s string) string {
+func GetItemCompleteString(s string) string {
 	return fmt.Sprintln(Emoji(ICON_SNOWMAN), COMPLETE, TEST_AGAINST, s)
 }
 
+func GetCompleteString(s string) string {
+	return fmt.Sprintln(Emoji(ICON_SNOWMAN), COMPLETE, GENERATED, s)
+}
+
 func GetLogger() *log.Logger {
+	if logger != nil {
+		return logger
+	}
 	logFile, err := os.OpenFile(t.Format("20060102150405")+".log", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
@@ -119,6 +130,9 @@ func CloseLogger() {
 }
 
 func GetReporter() *csv.Writer {
+	if reporter != nil {
+		return reporter
+	}
 	reportFile, err := os.OpenFile(t.Format("20060102150405_rpt")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
@@ -138,27 +152,25 @@ func CloseReporter() {
 	reportFile.Close()
 }
 
+func GetReportFileName() string {
+	return t.Format("20060102150405_rpt") + ".csv"
+}
+
 func GetStatisticsFileName() string {
 	return t.Format("20060102150405_stats") + ".csv"
 }
 
-func GetStatisticsReporter_W() *csv.Writer {
-	streportFile_W, err := os.OpenFile(t.Format("20060102150405_stats")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+func GetStatisticsReporter() *csv.Writer {
+	if streporter != nil {
+		return streporter
+	}
+	streportFile, err := os.OpenFile(t.Format("20060102150405_stats")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
-	streporter := csv.NewWriter(streportFile_W)
+	streporter := csv.NewWriter(streportFile)
 	record := []string{"NO.", "Name", "Pass", "Fail", "Total", "Pass Rate(%)", "Ts"}
 	streporter.Write(record)
-	return streporter
-}
-
-func GetStatisticsReporter_R() *csv.Reader {
-	streportFile_R, err := os.OpenFile("20191125154904_stats.csv", os.O_RDONLY, 0666)
-	if err != nil {
-		log.Fatalf("file open error : %v", err)
-	}
-	streporter := csv.NewReader(streportFile_R)
 	return streporter
 }
 
@@ -173,10 +185,6 @@ func GetStatisticsRecord(n int, name string, passNum int, total int) []string {
 		now.Format("01-02-2006 15:04:05.00 MST")}
 }
 
-func CloseStatisticsReporter_W() {
-	streportFile_W.Close()
-}
-
-func CloseStatisticsReporter_R() {
-	streportFile_R.Close()
+func CloseStatisticsReporter() {
+	streportFile.Close()
 }

@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"webservices/handlers/reportHandler"
-	"webservices/webutil"
 
 	"github.com/labstack/echo"
 )
@@ -28,11 +27,11 @@ func initHandlers(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.GET("/reports", reportHandler.GetStatisticsReports)
+	e.GET("/reports", reportHandler.GetReports)
+	e.GET("/reports/statistics", reportHandler.GetStatisticsReports)
 }
 
-func Start(latestFileName string) {
-	webutil.LatestFileName = latestFileName
+func Start() {
 	e := echo.New()
 	// Instantiate a template registry and register all html files inside the view folder
 	e.Renderer = &TemplateRegistry{

@@ -1,11 +1,11 @@
-{{define "statistics.html"}}
+{{define "report.html"}}
   <!DOCTYPE html>
   <html>
     <head>
+      <title>ChaosTester</title>
       <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
       <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-      <title>ChaosTester</title>
       <script>
       $(document).ready( function () {
           $('#myTable').DataTable();
@@ -26,21 +26,15 @@
     </head>
     <body>
       <table id='myTable' class="display">
-          <col width="10%">
-          <col width="15%">
-          <col width="15%">
-          <col width="15%">
-          <col width="15%">
-          <col width="15%">
-          <col width="15%">
+          <col width="25%">
+          <col width="25%">
+          <col width="25%">
+          <col width="25%">
           <thead>
               <tr>
                   <th>No.</th>
                   <th>Name</th>
-                  <th>Pass</th>
-                  <th>Fail</th>
-                  <th>Total</th>
-                  <th>Pass Rate(%)</th>
+                  <th>Result</th>
                   <th>Ts</th>
               </tr>
           </thead>

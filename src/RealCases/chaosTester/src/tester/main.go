@@ -43,10 +43,10 @@ func main() {
 	// close(ch)
 	// _, ok := <-ch
 	// if ok {
-	// 	webservices.Start("123")
+	// 	webservices.Start()
 	// } else {
 	// 	// fmt.Println("Starting webservices failed!!")
 	// }
 
-	webservices.Start("20191125154904_stats.csv")
+	webservices.Start()
 }

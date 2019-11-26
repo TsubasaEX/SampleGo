@@ -247,9 +247,9 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 		log.Fatalln("error writing csv:", err)
 	}
 
-	testutil.Cc.Print(testutil.GetCompleteString(testentity.Name))
+	testutil.Cc.Print(testutil.GetItemCompleteString(testentity.Name))
 	if testLogger != nil {
-		testLogger.Print(testutil.GetCompleteString(testentity.Name))
+		testLogger.Print(testutil.GetItemCompleteString(testentity.Name))
 	}
 	return passNum
 }

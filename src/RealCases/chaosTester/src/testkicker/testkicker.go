@@ -16,11 +16,18 @@ func Kick(config configutil.Config, args []string) string {
 	var testfunc testutil.TestFunc
 	var testLogger *log.Logger
 	var testReporter *csv.Writer
-	var teststReporter_W *csv.Writer
+	var teststReporter *csv.Writer
 	var b_Simple bool = false
 	var b_Log bool = false
 	var records [][]string
 	var n = 1
+
+	if b_Log {
+		defer testutil.CloseLogger()
+	}
+	defer testutil.CloseReporter()
+	defer testutil.CloseStatisticsReporter()
+
 	if len(args) != 0 {
 		split := strings.Split(args[0], "-")
 		if strings.Contains(split[1], "s") {
@@ -34,7 +41,7 @@ func Kick(config configutil.Config, args []string) string {
 		testLogger = testutil.GetLogger()
 	}
 	testReporter = testutil.GetReporter()
-	teststReporter_W = testutil.GetStatisticsReporter_W()
+	teststReporter = testutil.GetStatisticsReporter()
 	for _, web := range config.Apps.Web {
 		if web.Enable {
 			switch web.Name {
@@ -45,22 +52,23 @@ func Kick(config configutil.Config, args []string) string {
 				records = append(records, record)
 			// case "es-edgesense-worker":
 			default:
-				fmt.Println(testutil.GetNoTestCaseString(web.Name))
+				fmt.Print(testutil.GetNoTestCaseString(web.Name))
 				if testLogger != nil {
-					testLogger.Println(testutil.GetNoTestCaseString(web.Name))
+					testLogger.Print(testutil.GetNoTestCaseString(web.Name))
 				}
 			}
 		}
 	}
-	teststReporter_W.WriteAll(records)
-	if err := teststReporter_W.Error(); err != nil {
+	testutil.Cc.Print(testutil.GetCompleteString(testutil.GetStatisticsFileName()))
+	testutil.Cc.Print(testutil.GetCompleteString(testutil.GetReportFileName()))
+	if testLogger != nil {
+		testLogger.Print(testutil.GetCompleteString(testutil.GetStatisticsFileName()))
+		testLogger.Print(testutil.GetCompleteString(testutil.GetReportFileName()))
+	}
+	teststReporter.WriteAll(records)
+	if err := teststReporter.Error(); err != nil {
 		log.Fatalln("error writing csv:", err)
 	}
-	if b_Log {
-		testutil.CloseLogger()
-	}
-	testutil.CloseReporter()
-	testutil.CloseStatisticsReporter_W()
 
 	return testutil.GetStatisticsFileName()
 	// for _, app := range config.Apps.App {

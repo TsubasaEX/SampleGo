@@ -2,62 +2,43 @@
 package reportHandler
 
 import (
-	"fmt"
+	"encoding/csv"
 	"log"
 	"net/http"
-	"testutil"
+	"os"
 
 	"github.com/labstack/echo"
 )
 
-type Record struct {
-	No    int
-	Name  string
-	Pass  int
-	Fail  int
-	Total int
-	PR    float32
-	Ts    string
+func GetReports(c echo.Context) error {
+
+	file, err := os.OpenFile("20191125154904_rpt.csv", os.O_RDONLY, 0666)
+	defer file.Close()
+
+	if err != nil {
+		log.Fatalf("file open error : %v", err)
+	}
+	reader := csv.NewReader(file)
+	data, err := reader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return c.Render(http.StatusOK, "report.html", data[1:])
 }
 
 func GetStatisticsReports(c echo.Context) error {
 
-	teststReporter_R := testutil.GetStatisticsReporter_R()
-	data, err := teststReporter_R.ReadAll()
+	file, err := os.OpenFile("20191125154904_stats.csv", os.O_RDONLY, 0666)
+	defer file.Close()
+
+	if err != nil {
+		log.Fatalf("file open error : %v", err)
+	}
+	reader := csv.NewReader(file)
+	data, err := reader.ReadAll()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// var records []Record
-
-	for k, v := range data {
-		fmt.Println(k, v[0])
-		fmt.Println(k, v[1])
-		fmt.Println(k, v[2])
-		fmt.Println(k, v[3])
-		fmt.Println(k, v[4])
-	}
-	// fmt.Println(records)
-
-	// type User struct {
-	// 	Id   int
-	// 	Name string
-	// }
-
-	// type UserList []User
-	// var myuserlist UserList = UserList{
-	// 	{1, "a"},
-	// 	{2, "b"},
-	// 	{3, "c"},
-	// }
-
-	fmt.Print("-----------")
-	testutil.CloseStatisticsReporter_R()
-	return c.Render(http.StatusOK, "statistics.html", data)
-	// return c.Render(http.StatusOK, "statistics.html", map[string]interface{}{
-	// 	"name": "HOME",
-	// 	"msg":  "Hello, Boatswain!",
-	// })
-
-	// return c.String(http.StatusOK, webutil.LatestFileName)
+	file.Close()
+	return c.Render(http.StatusOK, "statistics.html", data[1:])
 }
