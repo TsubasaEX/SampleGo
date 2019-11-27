@@ -30,7 +30,7 @@ func initHandlers(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	// e.GET("/reports", reportHandler.GetReports)
+	e.GET("/reports", reportHandler.GetReports)
 	// e.GET("/statistics", statsHandler.GetStatistics)
 	e.GET("/reports/results", reportHandler.GetReportResults)
 	e.GET("/statistics/results", statsHandler.GetStatisticsResults)
