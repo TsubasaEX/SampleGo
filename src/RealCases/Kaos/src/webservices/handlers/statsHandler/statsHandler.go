@@ -1,5 +1,5 @@
-// reportHandler project reportHandler.go
-package reportHandler
+// statsHandler project statsHandler.go
+package statsHandler
 
 import (
 	"encoding/csv"
@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-func GetReportResults(c echo.Context) error {
+func GetStatisticsResults(c echo.Context) error {
 	name := c.QueryParam("file")
 	file, err := os.OpenFile(name, os.O_RDONLY, 0666)
 	defer file.Close()
@@ -25,5 +25,6 @@ func GetReportResults(c echo.Context) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return c.Render(http.StatusOK, "report.html", data[1:])
+	file.Close()
+	return c.Render(http.StatusOK, "statistics.html", data[1:])
 }

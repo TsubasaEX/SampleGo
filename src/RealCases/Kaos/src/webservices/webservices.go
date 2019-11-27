@@ -7,6 +7,9 @@ import (
 	"net/http"
 
 	"webservices/handlers/reportHandler"
+	"webservices/handlers/statsHandler"
+
+	"github.com/labstack/echo/middleware"
 
 	"github.com/labstack/echo"
 )
@@ -27,15 +30,20 @@ func initHandlers(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.GET("/reports", reportHandler.GetReports)
-	e.GET("/reports/statistics", reportHandler.GetStatisticsReports)
+	// e.GET("/reports", reportHandler.GetReports)
+	// e.GET("/statistics", statsHandler.GetStatistics)
+	e.GET("/reports/results", reportHandler.GetReportResults)
+	e.GET("/statistics/results", statsHandler.GetStatisticsResults)
 }
 
 func Start() {
 	e := echo.New()
 	// Instantiate a template registry and register all html files inside the view folder
+	e.Use(middleware.Static("../webservices"))
+	// e.Static("/static", "asset")
+
 	e.Renderer = &TemplateRegistry{
-		templates: template.Must(template.ParseGlob("../webservices/views/*.html")),
+		templates: template.Must(template.ParseGlob("../webservices/static/views/*.html")),
 	}
 	initHandlers(e)
 	e.Logger.Fatal(e.Start(":1323"))
