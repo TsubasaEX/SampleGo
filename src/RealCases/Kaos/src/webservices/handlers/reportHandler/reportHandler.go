@@ -12,7 +12,7 @@ import (
 
 func GetReports(c echo.Context) error {
 
-	file, err := os.OpenFile("20191125154904_rpt.csv", os.O_RDONLY, 0666)
+	file, err := os.OpenFile("20191126165004_rpt.csv", os.O_RDONLY, 0666)
 	defer file.Close()
 
 	if err != nil {
@@ -28,7 +28,7 @@ func GetReports(c echo.Context) error {
 
 func GetStatisticsReports(c echo.Context) error {
 
-	file, err := os.OpenFile("20191125154904_stats.csv", os.O_RDONLY, 0666)
+	file, err := os.OpenFile("20191126165004_stats.csv", os.O_RDONLY, 0666)
 	defer file.Close()
 
 	if err != nil {
