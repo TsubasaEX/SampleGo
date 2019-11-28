@@ -28,7 +28,7 @@ func GetReports(c echo.Context) error {
 		fmt.Println(file)
 	}
 
-	return c.JSON(http.StatusNotFound, map[string][]string{
+	return c.JSON(http.StatusOK, map[string][]string{
 		"files": files})
 }
 

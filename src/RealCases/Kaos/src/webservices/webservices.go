@@ -28,7 +28,7 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 
 func initHandlers(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.Render(http.StatusOK, "index.html", nil)
 	})
 	e.GET("/reports", reportHandler.GetReports)
 	// e.GET("/statistics", statsHandler.GetStatistics)
