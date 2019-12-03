@@ -5,25 +5,46 @@ $(function(){
         contentType: 'application/json',
         dataType: 'json',
 		success: function(result){
-			//var txt ='{"files":["./","20191126165004_rpt.csv","20191126165004_stats.csv","Config.yaml","doc.go","go.mod","go.sum","main.go"]}'
-			//var obj = JSON.parse(txt);
-			$("#demo").text(result.files[1] + ", " + result.files[2]);
-//			var i;
-//			var len =result.files.length
-//			for (i=0;i<len;i++){
-//				console.log(result.files[i]);
-//			}
-			var file;
-			for (file of result.files){
-				console.log(file);
-				$("#reportBody")
-					.append($('<tr>')
-						.append($('<td>')
-							.text('kkkkk')
-						)
-					)
+			try {
+				var t = $('#reportTable').DataTable();
+				var i;
+				var len = result.files.length
+				
+				for (i=0;i<len;i++){
+					var file = result.files[i][0];
+					var href = "/reports/results?file="+file;
+					var icon = "<a href="+href+"><i class=\"fas fa-dragon\" style=\"font-size:48px;color:blue;\"></i></a>";
+					t.row.add( [
+			            icon,
+			            i+1,
+			            file,
+			            result.files[i][1],
+			        ] ).draw( false );
+				}
+	//			var i;
+	//			var len = result.files.length
+	//			if(len != 0){
+	//				$(".dataTables_empty").remove();
+	//			}
+	//			for (i=0;i<len;i++){
+	//				$("#reportBody")
+	//					.append($('<tr>')var file =result.files[i][0]	
+	//						.append($('<td>')
+	//							.text(result.files[i][0])
+	//						)
+	//						.append($('<td>')
+	//							.text(i+1)
+	//						)
+	//						.append($('<td>')
+	//							.text(result.files[i][0])
+	//						).append($('<td>')
+	//							.text(result.files[i][1])
+	//						)
+	//					)
+	//			}
+			} catch(e){
+				console.log(e)
 			}
-			//$("#reportBody").html
 		
         },
         error: function(result){

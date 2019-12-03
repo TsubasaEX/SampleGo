@@ -8,15 +8,25 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"testutil"
 
 	"github.com/labstack/echo"
 )
 
 func GetReports(c echo.Context) error {
-	var files []string
+	var files [][]string
 	root := "./"
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		files = append(files, path)
+		var file []string
+		name := info.Name()
+		match, _ := regexp.MatchString("^([0-9]+)_rpt.csv$", name)
+		if match {
+			tf := info.ModTime().Format(testutil.TFORMAT)
+			file = append(file, name)
+			file = append(file, tf)
+			files = append(files, file)
+		}
 		return nil
 	})
 
@@ -28,7 +38,7 @@ func GetReports(c echo.Context) error {
 		fmt.Println(file)
 	}
 
-	return c.JSON(http.StatusOK, map[string][]string{
+	return c.JSON(http.StatusOK, map[string][][]string{
 		"files": files})
 }
 

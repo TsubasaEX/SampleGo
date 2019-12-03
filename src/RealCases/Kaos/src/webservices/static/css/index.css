@@ -8,6 +8,10 @@
 	border-style: double;
 }
 
+.sorting_1{
+	font-weight:bold;
+}
+
 thead {
 	background-color: hsl(270, 100%, 80%);
 }
