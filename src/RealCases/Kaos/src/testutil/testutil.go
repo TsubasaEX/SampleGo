@@ -50,6 +50,7 @@ const COMPLETE string = "[COMPLETE]"
 const DOT_STR = "............"
 const DASH_STR = "----------------------------------------"
 const RETRY_TIMES = 3
+const TFORMAT = "01-02-2006 15:04:05.00 MST"
 
 const ICON_CHECK = "\\U00002705"
 const ICON_CROSS = "\\U0000274E"
@@ -145,7 +146,7 @@ func GetReporter() *csv.Writer {
 
 func GetRecord(n int, name string, result string) []string {
 	now := time.Now()
-	return []string{strconv.Itoa(n), name, result, now.Format("01-02-2006 15:04:05.00 MST")}
+	return []string{strconv.Itoa(n), name, result, now.Format(TFORMAT)}
 }
 
 func CloseReporter() {
@@ -182,7 +183,7 @@ func GetStatisticsRecord(n int, name string, passNum int, total int) []string {
 		strconv.Itoa(total - passNum),
 		strconv.Itoa(total),
 		fmt.Sprintf("%f", float32(passNum)/float32(total)*100),
-		now.Format("01-02-2006 15:04:05.00 MST")}
+		now.Format(TFORMAT)}
 }
 
 func CloseStatisticsReporter() {

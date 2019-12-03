@@ -1,0 +1,17 @@
+#reportTable {
+	border-color: hsl(216, 100%, 50%);
+	border-style: double;
+}
+
+#statsTable {
+	border-color: hsl(216, 100%, 50%);
+	border-style: double;
+}
+
+thead {
+	background-color: hsl(270, 100%, 80%);
+}
+
+td {
+	text-align: center;
+}
