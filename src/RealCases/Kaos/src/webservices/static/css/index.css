@@ -8,6 +8,16 @@
 	border-style: double;
 }
 
+#report{
+	float:left;
+	width:50%;
+}
+
+#stats{
+	float:right;
+	width:50%;
+}
+
 .sorting_1{
 	font-weight:bold;
 }

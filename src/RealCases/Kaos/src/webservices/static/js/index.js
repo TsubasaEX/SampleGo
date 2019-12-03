@@ -13,7 +13,7 @@ $(function(){
 				for (i=0;i<len;i++){
 					var file = result.files[i][0];
 					var href = "/reports/results?file="+file;
-					var icon = "<a href="+href+"><i class=\"fas fa-dragon\" style=\"font-size:48px;color:blue;\"></i></a>";
+					var icon = "<a href="+href+"><i class=\"fas fa-dragon\" style=\"font-size:16px;color:blue;\"></i></a>";
 					t.row.add( [
 			            icon,
 			            i+1,
