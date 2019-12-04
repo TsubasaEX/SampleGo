@@ -3,30 +3,43 @@ package statsHandler
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"regexp"
+	"testutil"
 
 	"github.com/labstack/echo"
 )
 
 func GetStatistics(c echo.Context) error {
-	name := c.QueryParam("file")
-	file, err := os.OpenFile(name, os.O_RDONLY, 0666)
-	defer file.Close()
+	var files [][]string
+	root := "./"
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		var file []string
+		name := info.Name()
+		match, _ := regexp.MatchString("^([0-9]+)_stats.csv$", name)
+		if match {
+			tf := info.ModTime().Format(testutil.TFORMAT)
+			file = append(file, name)
+			file = append(file, tf)
+			files = append(files, file)
+		}
+		return nil
+	})
 
 	if err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{
-			"file":  name,
-			"error": "not found"})
+		panic(err)
 	}
-	reader := csv.NewReader(file)
-	data, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
+
+	for _, file := range files {
+		fmt.Println(file)
 	}
-	file.Close()
-	return c.Render(http.StatusOK, "statistics.html", data[1:])
+
+	return c.JSON(http.StatusOK, map[string][][]string{
+		"files": files})
 }
 
 func GetStatisticsResults(c echo.Context) error {

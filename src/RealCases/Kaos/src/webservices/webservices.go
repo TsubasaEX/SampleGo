@@ -31,7 +31,7 @@ func initHandlers(e *echo.Echo) {
 		return c.Render(http.StatusOK, "index.html", nil)
 	})
 	e.GET("/reports", reportHandler.GetReports)
-	// e.GET("/statistics", statsHandler.GetStatistics)
+	e.GET("/statistics", statsHandler.GetStatistics)
 	e.GET("/reports/results", reportHandler.GetReportResults)
 	e.GET("/statistics/results", statsHandler.GetStatisticsResults)
 }
