@@ -103,6 +103,10 @@ $(function(){
 			alert("Error: " + result.status + " " + result.statusText);
         }
     });
-    $('#reportTable').DataTable();
-	$('#statsTable').DataTable();
+    $('#reportTable').DataTable({
+    	"order": [[ 3, "desc" ], [ 2, "desc" ], [ 1, "asc" ]]
+    });
+	$('#statsTable').DataTable({
+    	"order": [[ 3, "desc" ], [ 2, "desc" ], [ 1, "asc" ]]
+    });
 });

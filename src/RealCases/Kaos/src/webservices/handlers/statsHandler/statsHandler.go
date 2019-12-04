@@ -3,7 +3,6 @@ package statsHandler
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,9 +33,9 @@ func GetStatistics(c echo.Context) error {
 		panic(err)
 	}
 
-	for _, file := range files {
-		fmt.Println(file)
-	}
+	// for _, file := range files {
+	// 	fmt.Println(file)
+	// }
 
 	return c.JSON(http.StatusOK, map[string][][]string{
 		"files": files})
