@@ -4,16 +4,16 @@ apps:
   web:
     - name: es-edgesense-portal
       port: "8087"
-      enable: true
+      enable: false
       label: "rmmModule=rmm-portal"
       times: 1
     - name: ess-edgesense-portal
       port: "8087"
-      enable: true
+      enable: false
       label: "rmmModule=rmm-portal"
       times: 1
   app:
     - name: es-edgesense-worker
       enable: true
       label: "rmmModule=rmm-worker"
-      times: 10
+      times: 3

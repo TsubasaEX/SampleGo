@@ -8,6 +8,8 @@ replace testkicker => ../testkicker
 
 replace app/edgesense/portal => ../app/edgesense/portal
 
+replace app/edgesense/worker => ../app/edgesense/worker
+
 replace testutil => ../testutil
 
 replace webservices => ../webservices
@@ -20,6 +22,7 @@ replace webservices/handlers/statsHandler => ../webservices/handlers/statsHandle
 
 require (
 	app/edgesense/portal v0.0.0-00010101000000-000000000000 // indirect
+	app/edgesense/worker v0.0.0-00010101000000-000000000000 // indirect
 	configutil v0.0.0-00010101000000-000000000000
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect

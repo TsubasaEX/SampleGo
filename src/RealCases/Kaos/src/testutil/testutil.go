@@ -44,8 +44,8 @@ const STAGE_ONE string = "Stage 1: Checking Running Status"
 const STAGE_TWO string = "Stage 2: Deleting Pod"
 const STAGE_THREE string = "Stage 3: Checking Running Status"
 const STAGE_FOUR string = "Stage 4: Checking Functions"
-const PASS string = "[PASS]"
-const FAIL string = "[FAIL]"
+const PASS_SB string = "[PASS]"
+const FAIL_SB string = "[FAIL]"
 const COMPLETE string = "[COMPLETE]"
 const DOT_STR = "............"
 const DASH_STR = "----------------------------------------"
@@ -62,6 +62,9 @@ const ICON_SCISSOR = "\\U00002702"
 const ICON_ARROW = "\\U000027A1"
 const ICON_SNOWMAN = "\\U000026C4"
 const ICON_EXCLAMATION = "\\U00002757"
+
+const PASS = "PASS"
+const FAIL = "FAIL"
 
 func Emoji(s string) string {
 	// Hex String
@@ -99,11 +102,11 @@ func GetStageString(s string) string {
 }
 
 func GetStagePassString(s string) string {
-	return fmt.Sprintln(Emoji(ICON_CHECK), PASS, s)
+	return fmt.Sprintln(Emoji(ICON_CHECK), PASS_SB, s)
 }
 
 func GetStageFailString(s string) string {
-	return fmt.Sprintln(Emoji(ICON_CROSS), FAIL, s)
+	return fmt.Sprintln(Emoji(ICON_CROSS), FAIL_SB, s)
 }
 
 func GetItemCompleteString(s string) string {

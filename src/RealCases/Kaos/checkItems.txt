@@ -1,3 +1,7 @@
+
+
+_____________________________________________________
+
 Zach,
 
 The only one means to assert OTA worker is alive or not is sending a request message. Here you go

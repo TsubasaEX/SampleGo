@@ -3,6 +3,7 @@ package testkicker
 
 import (
 	"app/edgesense/portal"
+	"app/edgesense/worker"
 	"configutil"
 	"encoding/csv"
 	"fmt"
@@ -50,7 +51,6 @@ func Kick(config configutil.Config, args []string) string {
 				passNum := testfunc.Test(args, b_Simple, testLogger, testReporter)
 				record := testutil.GetStatisticsRecord(n, web.Name, passNum, web.Times)
 				records = append(records, record)
-			// case "es-edgesense-worker":
 			default:
 				fmt.Print(testutil.GetNoTestCaseString(web.Name))
 				if testLogger != nil {
@@ -59,6 +59,24 @@ func Kick(config configutil.Config, args []string) string {
 			}
 		}
 	}
+
+	for _, app := range config.Apps.App {
+		if app.Enable {
+			switch app.Name {
+			case "es-edgesense-worker":
+				testfunc = &worker.TestEntity{config.IP, app.Name, app.Label, app.Times}
+				passNum := testfunc.Test(args, b_Simple, testLogger, testReporter)
+				record := testutil.GetStatisticsRecord(n, app.Name, passNum, app.Times)
+				records = append(records, record)
+			default:
+				fmt.Print(testutil.GetNoTestCaseString(app.Name))
+				if testLogger != nil {
+					testLogger.Print(testutil.GetNoTestCaseString(app.Name))
+				}
+			}
+		}
+	}
+
 	testutil.Cc.Print(testutil.GetCompleteString(testutil.GetStatisticsFileName()))
 	testutil.Cc.Print(testutil.GetCompleteString(testutil.GetReportFileName()))
 	if testLogger != nil {
@@ -71,7 +89,5 @@ func Kick(config configutil.Config, args []string) string {
 	}
 
 	return testutil.GetStatisticsFileName()
-	// for _, app := range config.Apps.App {
-	// }
 
 }

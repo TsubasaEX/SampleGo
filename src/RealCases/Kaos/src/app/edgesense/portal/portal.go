@@ -25,9 +25,6 @@ type TestEntity struct {
 var b_Simple = false
 var testLogger *log.Logger
 
-const PASS = "PASS"
-const FAIL = "FAIL"
-
 func (testentity *TestEntity) status_check() bool {
 	str := "kubectl get pods -l " + testentity.Label + " --field-selector=status.phase=Running"
 	cmd := exec.Command("cmd", "/K", str)
@@ -219,7 +216,7 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 					testLogger.Print(testutil.GetStagePassString(testutil.STAGE_FOUR))
 				}
 
-				record := testutil.GetRecord(i+1, testentity.Name, PASS)
+				record := testutil.GetRecord(i+1, testentity.Name, testutil.PASS)
 				records = append(records, record)
 				passNum++
 				break
@@ -233,7 +230,7 @@ func (testentity *TestEntity) Test(args []string, simple bool, testlogger *log.L
 				if testLogger != nil {
 					testLogger.Print(testutil.GetStageFailString(testutil.STAGE_FOUR))
 				}
-				record := testutil.GetRecord(i+1, testentity.Name, FAIL)
+				record := testutil.GetRecord(i+1, testentity.Name, testutil.FAIL)
 				records = append(records, record)
 				break
 			}

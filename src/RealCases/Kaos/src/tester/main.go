@@ -58,12 +58,12 @@ func main() {
 		wg.Add(1)
 		wg.Wait()
 		close(ch)
-		_, ok := <-ch
-		if ok {
-			webservices.Start()
-		} else {
-			fmt.Println("Starting webservices failed!!")
-		}
+		// _, ok := <-ch
+		// if ok {
+		// 	webservices.Start()
+		// } else {
+		// 	fmt.Println("Starting webservices failed!!")
+		// }
 	}
 
 	if b_Web {
@@ -71,6 +71,6 @@ func main() {
 	}
 
 	if !b_Test && !b_Web {
-		fmt.Println("Hey!! WTF do you actually want?!")
+		fmt.Println("F**K YOU!!")
 	}
 }
