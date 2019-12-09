@@ -3,6 +3,16 @@
 	border-style: double;
 }
 
+/*#stats{
+	float:left;
+	width:50%;
+}
+
+#chartContainer{
+	float:right;
+	width:50%;	
+}*/
+
 thead {
 	background-color: hsl(270, 100%, 80%);
 }
