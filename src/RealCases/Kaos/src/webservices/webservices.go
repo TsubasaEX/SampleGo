@@ -32,8 +32,8 @@ func initHandlers(e *echo.Echo) {
 	})
 	e.GET("/reports", reportHandler.GetReports)
 	e.GET("/statistics", statsHandler.GetStatistics)
-	e.GET("/reports/view", reportHandler.GetReportResults)
-	e.GET("/statistics/view", statsHandler.GetStatisticsResults)
+	e.GET("/reports/view", reportHandler.GetReportView)
+	e.GET("/statistics/view", statsHandler.GetStatisticsView)
 }
 
 func Start() {

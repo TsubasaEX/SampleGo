@@ -41,7 +41,7 @@ func GetReports(c echo.Context) error {
 		"files": files})
 }
 
-func GetReportResults(c echo.Context) error {
+func GetReportView(c echo.Context) error {
 	name := c.QueryParam("file")
 	file, err := os.OpenFile(name, os.O_RDONLY, 0666)
 	defer file.Close()

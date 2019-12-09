@@ -41,7 +41,7 @@ func GetStatistics(c echo.Context) error {
 		"files": files})
 }
 
-func GetStatisticsResults(c echo.Context) error {
+func GetStatisticsView(c echo.Context) error {
 	name := c.QueryParam("file")
 	file, err := os.OpenFile(name, os.O_RDONLY, 0666)
 	defer file.Close()

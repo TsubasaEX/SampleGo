@@ -1,4 +1,11 @@
 $(document).ready( function () {
+	$('#statsTable > tbody > tr').each(function(index, tr) { 
+		$(this).find('td').each(function(index, td) {
+			console.log(index);
+			console.log(td);
+		});
+	});
+	
       $('#statsTable').DataTable();
 } );
 
@@ -8,6 +15,14 @@ $(document).ready( function () {
 
 $(window).on('load', function () {
 	 
+//	$('#statsTable > tbody > tr').each(function(index, tr) { 
+////		alert(this);
+//		var name = $(this).find('#name').html();
+//  		console.log(index);
+//// 		console.log(name);
+//		console.log(tr);
+//	});
+	
 	//Better to construct options first and then pass it as a parameter
 	var options = {
 		animationEnabled: true,
