@@ -51,6 +51,9 @@ const DOT_STR = "............"
 const DASH_STR = "----------------------------------------"
 const RETRY_TIMES = 3
 const TFORMAT = "01-02-2006 15:04:05.00 MST"
+const TLFORMAT = "20060102150405"
+const TRFORMAT = "20060102150405_rpt"
+const TSFORMAT = "20060102150405_stats"
 
 const ICON_CHECK = "\\U00002705"
 const ICON_CROSS = "\\U0000274E"
@@ -121,7 +124,7 @@ func GetLogger() *log.Logger {
 	if logger != nil {
 		return logger
 	}
-	logFile, err := os.OpenFile(t.Format("20060102150405")+".log", os.O_WRONLY|os.O_CREATE, 0666)
+	logFile, err := os.OpenFile(t.Format(TLFORMAT)+".log", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
@@ -137,7 +140,7 @@ func GetReporter() *csv.Writer {
 	if reporter != nil {
 		return reporter
 	}
-	reportFile, err := os.OpenFile(t.Format("20060102150405_rpt")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+	reportFile, err := os.OpenFile(t.Format(TRFORMAT)+".csv", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
@@ -157,18 +160,18 @@ func CloseReporter() {
 }
 
 func GetReportFileName() string {
-	return t.Format("20060102150405_rpt") + ".csv"
+	return t.Format(TRFORMAT) + ".csv"
 }
 
 func GetStatisticsFileName() string {
-	return t.Format("20060102150405_stats") + ".csv"
+	return t.Format(TSFORMAT) + ".csv"
 }
 
 func GetStatisticsReporter() *csv.Writer {
 	if streporter != nil {
 		return streporter
 	}
-	streportFile, err := os.OpenFile(t.Format("20060102150405_stats")+".csv", os.O_WRONLY|os.O_CREATE, 0666)
+	streportFile, err := os.OpenFile(t.Format(TSFORMAT)+".csv", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("file open error : %v", err)
 	}
