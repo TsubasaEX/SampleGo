@@ -12,7 +12,7 @@ $(function(){
 				
 				for (i=0;i<len;i++){
 					var file = result.files[i][0];
-					var href = "/reports/results?file="+file;
+					var href = "/reports/view?file="+file;
 					var icon = "<a href="+href+"><i class=\"fas fa-dragon\" style=\"font-size:16px;color:blue;\"></i></a>";
 					t.row.add( [
 			            icon,
@@ -64,7 +64,7 @@ $(function(){
 				
 				for (i=0;i<len;i++){
 					var file = result.files[i][0];
-					var href = "/statistics/results?file="+file;
+					var href = "/statistics/view?file="+file;
 					var icon = "<a href="+href+"><i class=\"fas fa-pastafarianism\" style=\"font-size:16px;color:green;\"></i></a>";
 					t.row.add( [
 			            icon,
