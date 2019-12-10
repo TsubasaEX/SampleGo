@@ -60,9 +60,9 @@ $(window).on('load', function () {
 	//Better to construct options first and then pass it as a parameter
 	var options = {
 		animationEnabled: true,
-		theme: "light2", //"light1", "dark1", "dark2"
+		theme: "light1", //"light1", "dark1", "dark2"
 		title:{
-			text: "Division of Products Sold in 2nd Quarter"             
+			text: "Test results of Kaos"             
 		},
 		axisX:{
 			interval: 1
@@ -76,6 +76,7 @@ $(window).on('load', function () {
 		},
 		data:[{
 			type: "stackedBar100",
+			color: "LightSeaGreen",
 			toolTipContent: "{label}<br><b>{name}:</b> {y} (#percent%)",
 			showInLegend: true, 
 			name: "Pass",
@@ -83,6 +84,7 @@ $(window).on('load', function () {
 		},
 		{
 			type: "stackedBar100",
+			color: "crimson",
 			toolTipContent: "<b>{name}:</b> {y} (#percent%)",
 			showInLegend: true, 
 			name: "Fail",
