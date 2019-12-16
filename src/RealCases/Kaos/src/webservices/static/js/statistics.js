@@ -62,7 +62,7 @@ $(window).on('load', function () {
 		animationEnabled: true,
 		theme: "light1", //"light1", "dark1", "dark2"
 		title:{
-			text: "Test results of Kaos"             
+			text: "Statistical Chart"             
 		},
 		axisX:{
 			interval: 1
