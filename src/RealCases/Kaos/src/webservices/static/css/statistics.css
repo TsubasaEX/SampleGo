@@ -1,7 +1,7 @@
-#statsTable {
+/*#statsTable {
 	border-color: hsl(216, 100%, 50%);
 	border-style: double;
-}
+}*/
 
 /*#stats{
 	float:left;
@@ -15,6 +15,10 @@
 
 thead {
 	background-color: hsl(270, 100%, 80%);
+}
+
+th {
+	text-align: center;
 }
 
 td {

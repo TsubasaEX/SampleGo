@@ -32,7 +32,7 @@
               <li class="nav-item active">
                 <a class="nav-link" href="/">Home
                       <span class="sr-only">(current)</span>
-                    </a>
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
@@ -47,29 +47,38 @@
           </div>
         </div>
       </nav>
-      <table id="reportTable" class="display">
-          <col width="25%">
-          <col width="25%">
-          <col width="25%">
-          <col width="25%">
-          <thead>
-              <tr>
-                  <th>No.</th>
-                  <th>Name</th>
-                  <th>Result</th>
-                  <th>Ts</th>
-              </tr>
-          </thead>
-          <tbody>
-              {{range $key,$value := .}}
-              <tr>
-                {{range $key,$value2 := $value}}
-                <td>{{$value2}}</td>
-                {{end}}
-              </tr>
-              {{end}}
-          </tbody>
-      </table>
+
+      <!-- Page Content -->
+      <div class="container">
+        <div class="card border-0 shadow my-5">
+            <h5 class="card-header">Reports</h5>
+            <div class="card-body p-5">
+              <table id="reportTable" class="display">
+                  <col width="25%">
+                  <col width="25%">
+                  <col width="25%">
+                  <col width="25%">
+                  <thead>
+                      <tr>
+                          <th>No.</th>
+                          <th>Name</th>
+                          <th>Result</th>
+                          <th>Ts</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {{range $key,$value := .}}
+                      <tr>
+                        {{range $key,$value2 := $value}}
+                        <td>{{$value2}}</td>
+                        {{end}}
+                      </tr>
+                      {{end}}
+                  </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
     </body>
   </html>
 {{end}}

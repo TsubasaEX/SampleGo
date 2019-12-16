@@ -1,4 +1,4 @@
-#reportTable {
+/*#reportTable {
 	border-color: hsl(216, 100%, 50%);
 	border-style: double;
 }
@@ -6,9 +6,9 @@
 #statsTable {
 	border-color: hsl(216, 100%, 50%);
 	border-style: double;
-}
+}*/
 
-#report{
+/*#report{
 	float:left;
 	width:50%;
 }
@@ -16,12 +16,26 @@
 #stats{
 	float:right;
 	width:50%;
-}
+}*/
 
 thead {
 	background-color: hsl(270, 100%, 80%);
 }
 
+th {
+	text-align: center;
+}
+
 td {
 	text-align: center;
+}
+
+/* Set a background image by replacing the URL below */
+body {
+/*  background: url('https://source.unsplash.com/twukN12EN7c/1920x1080') no-repeat center center fixed;*/
+  background: url('https://source.unsplash.com/1920x1080/?nature') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
 }

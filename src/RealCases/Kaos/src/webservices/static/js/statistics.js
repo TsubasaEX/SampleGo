@@ -55,8 +55,8 @@ $(document).ready( function () {
 //};
 
 $(window).on('load', function () {
-	console.log(passPoints);
-	console.log(failPoints);
+//	console.log(passPoints);
+//	console.log(failPoints);
 	//Better to construct options first and then pass it as a parameter
 	var options = {
 		animationEnabled: true,
