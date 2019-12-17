@@ -39,3 +39,12 @@ body {
   background-size: cover;
   -o-background-size: cover;
 }
+
+
+.carousel-control-prev {
+  margin-left: -100px;
+}
+
+.carousel-control-next {
+  margin-right: -100px;
+}

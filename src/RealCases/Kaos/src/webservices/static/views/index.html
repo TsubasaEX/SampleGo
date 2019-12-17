@@ -78,59 +78,83 @@
 </div>-->
 
 
-      <!-- Page Content -->
-      <div class="container">
-        <div class="card border-0 shadow my-5">
-            <h5 class="card-header">Statistical Chart</h5>
-            <div class="card-body p-5">
-                <div id="report">
-                  <table id="reportTable" class="display" style="width:100%">
-                    <col width="20%">
-                    <col width="20%">
-                    <col width="30%">
-                    <col width="30%">
-                    <thead>
-                        <tr>
-                            <th>View</th>
-                            <th>No.</th>
-                            <th>File</th>
-                            <th>Ts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reportBody">
-                    </tbody>
-                  </table>
-                </div>
-            </div>
-        </div>
-      </div>
-
-
-      <!-- Page Content -->
-      <div class="container">
-        <div class="card border-0 shadow my-5">
-            <h5 class="card-header">Statistical Chart</h5>
-            <div class="card-body p-5">
-                 <div id="stats">
-                    <table id="statsTable" class="display" style="width:100%">
-                      <col width="20%">
-                      <col width="20%">
-                      <col width="30%">
-                      <col width="30%">
-                      <thead>
-                          <tr>
-                              <th>View</th>
-                              <th>No.</th>
-                              <th>File</th>
-                              <th>Ts</th>
-                          </tr>
-                      </thead>
-                      <tbody id="statsBody">
-                      </tbody>
-                    </table>
+      <div class="container mt-3">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+        </ul>
+        
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <!-- Page Content -->
+            <div class="container">
+              <div class="card border-0 shadow my-5">
+                  <h5 class="card-header">Report Files</h5>
+                  <div class="card-body p-5">
+                      <div id="report">
+                        <table id="reportTable" class="display" style="width:100%">
+                          <col width="20%">
+                          <col width="20%">
+                          <col width="30%">
+                          <col width="30%">
+                          <thead>
+                              <tr>
+                                  <th>View</th>
+                                  <th>No.</th>
+                                  <th>File</th>
+                                  <th>Ts</th>
+                              </tr>
+                          </thead>
+                          <tbody id="reportBody">
+                          </tbody>
+                        </table>
+                      </div>
                   </div>
+              </div>
+            </div>  
+          </div>
+          <div class="carousel-item">
+            <!-- Page Content -->
+            <div class="container">
+              <div class="card border-0 shadow my-5">
+                  <h5 class="card-header">Statistical Files</h5>
+                  <div class="card-body p-5">
+                       <div id="stats">
+                          <table id="statsTable" class="display" style="width:100%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="30%">
+                            <col width="30%">
+                            <thead>
+                                <tr>
+                                    <th>View</th>
+                                    <th>No.</th>
+                                    <th>File</th>
+                                    <th>Ts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="statsBody">
+                            </tbody>
+                          </table>
+                        </div>
+                  </div>
+              </div>
             </div>
+          </div>
         </div>
+        
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </a>
+      </div>
       </div>
 
     </body>
